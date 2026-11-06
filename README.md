@@ -16,6 +16,7 @@ python -m streamlit run app.py               # forecast app (needs the steps abo
 ```
 
 ## Factors modelled
+
 | Group | Batter | Bowler |
 |---|---|---|
 | Form baseline | rolling 20-innings strike rate, dismissal rate | rolling economy, wickets per 24 balls |
@@ -29,18 +30,21 @@ python -m streamlit run app.py               # forecast app (needs the steps abo
 All baselines use only matches *before* the one being predicted (tested in `test_no_leakage_in_baseline`).
 
 ## The app
+
 `app.py` lets you pick a batter or bowler, a destination league, team, venue, innings and (for batters)
 batting slot, then shows recent form, the forecast, and a what-if table: how much each factor group
 (league change, team change, venue, batting position) moved the forecast versus leaving it unchanged.
 Logic lives in `cricket_predictor/predict.py`; it uses the 5-innings models.
 
 ## Targets
+
 - `residual_sr` / `residual_econ`: one innings (or spell) minus the recent-form baseline. Very noisy.
 - `residual_sr5` / `residual_econ5`: the next 5 appearances (this one included) minus the same baseline,
   weighted by balls. Smoother. Training rows whose 5-match window reaches into the test period are
   purged, so the test set is never seen through the target.
 
 ## Known limits / next steps
+
 - `position` is known only once the match starts. For "what if he joins team X" predictions, supply
   the expected slot as a scenario input (like power-play role in the NHL app).
 - Not yet included: weather/dew, batter-vs-bowler-type matchups, player age (Cricsheet's
